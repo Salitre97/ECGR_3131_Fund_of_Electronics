@@ -1,0 +1,275 @@
+\documentclass[conference]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{booktabs}  % For better table formatting
+\usepackage{siunitx}   % For consistent unit formatting
+\usepackage{lettrine}
+
+\captionsetup[figure]{labelformat=empty}
+\begin{document}
+
+\title{\textbf{ECGR 3131 Project 1: BJT Amplifier}}
+
+\author{\IEEEauthorblockN{Swayam Mehta, Cristian Salitre}
+}
+
+\maketitle
+\section{INTRODUCTION}
+\lettrine[nindent=0em,lines=3]{T}he project focuses on designing a BJT amplifier using the Fairchild Q2N3904 NPN Transistor, adhering to specifications derived from the component's datasheet. Essential parameters like current gain and early voltage are determined to achieve a minimum voltage gain of 150 V/V, with a 5 kOhms load resistance, operating on a 16V supply. The design aims to maintain power consumption under 200 mW and ensure a 10V peak-to-peak output voltage swing. Further datasheet information is utilized as required to meet the following design objectives.
+
+\begin{itemize}
+    \item AV \( = \frac{v_O}{v_I} \geq 150 \) V/V
+    \item RL = 5 kOhms
+    \item VCC = 16 V (rail voltage, single supply)
+    \item Power Consumption \( = V_{CC} \cdot I_{CC} \leq 200 \) mW
+    \item Swing = 10 Vpp 
+    \item Rin = Any Value
+    \item Rout = Any Value
+\end{itemize}
+\par
+\vspace{12pt} % Add some vertical space after the paragraph
+Using the specifications mentioned above, hand calculations were made to determine the resistor values of R1, R2, RC, and RE and adjusted to values that were available in the lab while still keeping within the requirements. After the hand calculations, the circuit was simulated in Multism shown in Figure 1-1.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshot 2023-11-12 170307.png}
+    \caption{Fig 1-1: Simulated Circuit}
+    \label{fig:simulated-circuit}
+\end{figure}
+
+\section{DC ANALYSIS}
+After simulating the circuit in Multisim using the specifications described and finding the unknown values for R1 and R2, the DC biasing loop was set up. The AC Voltage source was grounded and the capacitors were treated as open circuits. Following, Voltage Vbb and resistance Rb were calculated. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshot 2023-11-13 125739.png}
+    \caption{Fig 1-2: DC Circuit Hand Analysis}
+    \label{fig1-1:dc-circuit-hand-analysis}
+\end{figure}
+
+In Fig 1-1, the calculations started at the base branch with the use of
+the voltage divider rule to find VB. After finding Vb
+at the base, with the help of the value at the emitter, VBE
+(from the datasheet), the voltage through the emitter branch
+VE was calculated with the use of the formula:
+\[VE = VB - VBE\]
+
+After the VE was determined, the current through the emitter
+branch IE was calculated through the use of Ohm's Law:
+\[IE = \frac{VE}{RE}\]
+
+Then the next step was to find the current through the
+collector IC, which for theoretical calculation was set equal to the emitter current IE.  After finding IE, using Ohm's Law the voltage across the collector branch VC was found
+\[VC = VCC - (RC \cdot IC)\]
+
+Finally, values from the voltage difference between the collector and the emitter VCE was calculated using:
+\[ VCE = VC-VE\]
+
+After verifying that the hand calculations made were accurate, the circuit was simulated in Multisim to determine the simulation values for the voltages and current. By comparing the hand calculations, Multisim, and lab-measured values,
+percent errors were calculated. 
+These values are shown in Table I.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Results & Hand & Multisim & Lab & Error \\ \hline
+Ie & 7.63mA & 7.01mA & 7.29mA& 0.41\%  \\ \hline
+Ib & 43.3uA& 41.12uA & 39.59uA& 8.62\%\\ \hline
+Ic & 7.63mA & 6.9mA & 7.33 mA& 3.93\%\\ \hline
+Ve & 1.68V & 1.75V& 1.62V& 3.57\%\\ \hline
+Vb & 2.38V & 2.04V & 2.32V& 4.74\%\\ \hline
+Vc& 6.8V& 5.33V& 8.05V& 18.08\%\\ \hline
+P & 122.8mW&   127.7mW& 128mW& 2.15\%\\ \hline
+\end{tabular}
+\caption{DC Voltages and Currents}
+\label{tab:DC-Voltage-and-Currents}
+\end{table}
+
+\section{AC ANALYSIS}
+
+After the DC Analysis, the AC analysis circuit was set up using the pi-model as shown in Fig1-~\ref{fig1-:pi-model} below. For the Pi model, the DC source is set to ground or ignored. The capacitors are treated as short, to ensure voltage coming through the circuit is in AC. VCC becomes ground, and Vsig is the new voltage coming through the circuit.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{Screenshot 2023-11-13 121521.png}
+    \caption{Fig 1-3: AC Pi-Model Calculations}
+    \label{fig1-:pi-model}
+\end{figure}
+
+After the AC and DC analysis calculations, the load lines for each were calculated as shown below in Fig1-~\ref{fig1-4:ac-dc-load-line}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Screenshot 2023-11-12 193013.png}
+    \caption{Fig 1-4: AC/DC Load Line}
+    \label{fig1-4:ac-dc-load-line}
+\end{figure}
+
+The load lines were then plotted to visualize the swing and the Q point as shown in Fig1-~\ref{fig1-5:load-line-swing}. Our theoretical swing was 14.64V, which exceeds the specified requirements.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Screenshot 2023-11-13 122830.png}
+    \caption{Fig 1-5: AC-DC Load Line and Swing Graph}
+    \label{fig1-5:load-line-swing}
+\end{figure}
+
+The input and output impedance was then calculated as shown in Fig1-~\ref{fig1-6:impedance-calculation}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Screenshot 2023-11-13 120941.png}
+    \caption{Fig 1-6: Impedance Hand Calculations}
+    \label{fig1-6:impedance-calculation}
+\end{figure}
+
+
+
+\section{RESULTS}
+In this section, we present the results and analysis of our BJT amplifier design.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{AC_sweep_magnitude_dB.png}
+    \caption{Fig 2-1: Gain vs Frequency}
+    \label{fig:fig-2-1-gain-frequency}
+\end{figure}
+
+The following points highlight key aspects of the gain:
+\begin{itemize}
+    \item Maximum Gain: 43 dB
+    \item \( F_{-3dB} \) Low: @200 Hz
+    \item \( F_{-3dB} \) High: @55 MHz
+    \item Bandwidth: 54.99 MHz
+\end{itemize}
+\par
+\vspace{12pt} % Add some vertical space after the paragraph
+
+The bode plot, as shown in Figure 2-1, is a great tool for analyzing the voltage gain for electronic circuits, particularly amplifiers, and filters. It graphically depicts the voltage gain against a range of frequencies on a logarithmic scale, allowing for ease of identification of characteristics such as maximum gain, bandwidth, and the frequencies at which the gain drops by 3dB from the peak, known as \( F_{-3dB} \). The \( F_{-3dB} \) shows the limits of this effective range, marking the frequencies at which the gain begins to diminish significantly, serving as a practical measure of the system's frequency limits. The bandwidth shows the range of frequencies at which the amplifier can operate effectively.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{AC_sweep_phase.png}
+    \caption{Fig 2-2: Phase vs Frequency}
+    \label{fig:fig-2-2-phase-frequency}
+\end{figure}
+
+In Figure 2-2, we observe how the relationship of the phase angle between input and output varies along the range of frequencies. Understanding the phase response is integral to ensuring that a system performs correctly across its operational frequency range, maintaining both the amplitude and temporal characteristics of the signal.
+
+The following phase characteristics are observed:
+\begin{itemize}
+    \item \( F_{-3dB} \) Low: @200 Hz
+    \item \( F_{-3dB} \) High: @55 MHz
+\end{itemize}
+\par
+\vspace{12pt} % Add some vertical space after the paragraph
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{transient_response.png}
+    \caption{Fig 2-3: Transient Response}
+    \label{fig:fig-2-3-transient-response}
+\end{figure}
+
+The transient response, as shown in Figure 2-3, highlights the following points of interest:
+\begin{itemize}
+    \item \(V^+ = 137.4\) mV
+    \item \(V^- = -138.2\) mV
+    \item \(V_{\text{pp}} = 275.6\) mV
+\end{itemize}
+\par
+\vspace{12pt} % Add some vertical space after the paragraph
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{input_impedance.png}
+    \caption{Fig 2-4: Input Impedance}
+    \label{fig:input-impedance}
+\end{figure}
+
+To determine the input impedance, as shown in Figure 2-4, a probe is placed near the input signal to measure voltage and current. The Ohm's Law equation \(R_{\text{in}} = \frac{V_{\text{in}}}{I_{\text{in}}}\) is used to obtain input impedance. The graph shows the relationship between input impedance and frequency. At 65kHz, the impedance is 624 ohms in the simulation.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{output_impedance.png}
+    \caption{Fig 2-5: Output Impedance}
+    \label{fig:output-impedance}
+\end{figure}
+
+Figure 2-5 shows the output impedance. To obtain this, a voltage source is placed in series with a 5 kohm load resistor. The graph demonstrates how the output impedance begins to increase after surpassing 10MHz. At 65kHz, the impedance is 1.89 kohm in the simulation.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Results & Hand & Multisim & Lab & Error \\ \hline
+Rin & 0.482 kohm & 0.624 kohm & 0.216 kohm & 55\% \\ \hline
+Rout & 0.967 kohm & 1.18 kohm & 1.33 kohm & 37.8\% \\ \hline
+Gain & 260 V/V & 138 V/V & 161 V/V & 38.07\% \\ \hline
+\end{tabular}
+\caption{AC Impedances and Gain}
+\label{tab:AC-impedances-gain}
+\end{table}
+
+\subsection{LAB MEASUREMENTS}
+Below are the screenshots and pictures of the equipment used and the circuit setup to obtain the desired gain, swing, and power.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{scope_0.png}
+    \caption{Oscilloscope}
+    \label{fig:oscilloscope}
+\end{figure}
+
+In the screenshot above, CH2 (green) is the input and CH1 (yellow) is the output. We can see the swing Pk-Pk[1] is 10.5V. The gain can be calculated using the formula 
+
+\[ \text{Gain} = \frac{\text{Pk-Pk[1]}}{\text{Pk-Pk[2]}} = \frac{10.5V}{0.062V} = 169 \]
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{20231113_175221.jpg}
+    \caption{AC Supply}
+    \label{fig:ac-supply}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{20231113_175224.jpg}
+    \caption{DC Supply}
+    \label{fig:dc-supply}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{IMG_7949.jpg}
+    \caption{Common Emitter Circuit}
+    \label{fig:common-emitter-circuit}
+\end{figure}
+
+
+
+\section{AREAS FOR FUTURE RESEARCH/IMPROVEMENT}
+The areas for improvement would be getting better components and wires to lower the internal resistance in order to obtain a gain close enough to the theoretical value.  The simulation and hand values assume ideal conditions that are simply not possible to replicate with the equipment available to us.  Using resistors with less error would result in more desirable results. 
+\par
+\vspace{12pt} % Add some vertical space after the paragraph
+The theoretical gain (260 V/V) was greater than the gain obtained in the lab (161 V/V).  The theoretical values are simulated in nominal conditions; where the amplifier's internal resistance is infinite.  In practical conditions that is not the case; the internal resistance is not infinite.  External factors such as temperature, and humidity affect the circuit impedance and capacitance.  The quality of wires and components used in the circuit is crucial; using damaged equipment will result in underwhelming results.  This will be considered for the next lab in order to produce the desired results with minimal error between theoretical and laboratory values.
+In TABLE I, the error between the lab, hand analysis, and simulation are within 20 percent error.   Our gain had a 38-percent error from the theoretical value.  That percent error is too big, ideally want to the smallest error in the lab values, but again that would require ideal conditions.  There was knowledge that we did not have for example though we knew how to hand calculate input impedance (Rin) and output impedance (Rout), we were unsure how to measure them in the practical lab. This is an example of some of the unforeseen problems that we were not prepared for. With that said, this lab has allowed us room for improvement in not only planning but in execution as well.
+
+\section{CONCLUSION}
+Figure 2-1 shows that the range frequency of operation is from 200 Hz to 55 MHz.  The 3dB bandwidth of the circuit is 54.99 MHz.  The Peak Gain Frequency is 100 kHz.
+\par
+\vspace{12pt} % Add some vertical space after the paragraph
+The goal for this project was to meticulously design, build, and test a single-stage Common Emitter BJT Amplifier.  The design had to be within the constraints that were given to us.  During this process, we encountered multiple issues that delayed the completion of this project.  After successfully simulating our circuit that provided the desired results, we then proceeded to construct and test our design.  We encountered multiple issues that delayed the completion of this project.  First, the breadboard our group was using resulted in a grounded output; where we spent hours trying to resolve the issue.  The solution was to use a better breadboard, and so we did.  We also encountered clipping in our output for which we modified R1, R2, and Rc leaving Re constant.  The use of variable resistors aided in finding the most optimal values for a gain of 161 (V/V) with a phase shift of approximately 190 degrees. This resolved the clipping in our output resulting in a smooth sine wave signal.  Our BJT Amplifier circuit operates at peak performance with a 65mV sinusoidal input and a frequency of 30kHz with a zero-degree phase shift.  A signal input greater than 80 mV will result in clipping and a swing greater than 10 vpp.  A swing greater than 10Vpp results in an unsymmetrical signal output, while our swing is 10.5Vpp the circuit still follows the requirements.
+
+\par
+\vspace{12pt} % Add some vertical space after the paragraph
+The power consumption of the circuit measured in the lab was acquired by measuring the input current being supplied by the DC power supply; we then multiplied the value measured of 8mA by the DC input 16V and this resulted in the power consumption of 128mW.  Our circuit met the specifications of the project with a gain of 161 V/V and a swing of 10.5 Vpp.  
+
+
+\section{REFRENCES}
+[1] Abasifreke Ebong, Chapter 4: Bipolar Junction
+Transistors (BJT), Oct 2021.
+
+\end{document}
